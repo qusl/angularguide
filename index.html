@@ -5,35 +5,40 @@
     <script>
         angular.module('app', []);
 
-        angular.module('app').controller('SearchCtrl', ['$scope', '$http', 'userService', function($scope, $http, userService) {
-
-            $scope.search = function() {
-                $http.get('data.json').then(function(response) {
-                    // successful
-                    var data = response.data;
-                    if (data.success) {
-                        userService.result = data.users;
-                    } else {
-                        alert('failed' + response);
-                    }
-                }, function(response) {
-                    // failed
-                    alert('failed' + response.status);
-                });
-            };
+        angular.module('app').controller('SearchCtrl', ['$scope', 'userService', function($scope, userService) {
+            $scope.search = userService.search;
         }]);
 
         angular.module('app').controller('ResultCtrl', ['$scope', 'userService', function($scope, userService) {
             $scope.$watch(function() {
-                return userService.result;
+                return userService.getSearchResult();
             }, function(data) {
                 $scope.result = data;
             });
         }]);
 
-        angular.module('app').factory('userService', function() {
-            return {};
-        });
+        angular.module('app').factory('userService', ['$http', function($http) {
+            var searchResult;
+            return {
+                search: function() {
+                    $http.get('data.json').then(function(response) {
+                        // successful
+                        var data = response.data;
+                        if (data.success) {
+                            searchResult = data.users;
+                        } else {
+                            alert('failed' + response);
+                        }
+                    }, function(response) {
+                        // failed
+                        alert('failed' + response.status);
+                    });
+                },
+                getSearchResult: function() {
+                    return searchResult;
+                }
+            };
+        }]);
 
     </script>
 </head>
