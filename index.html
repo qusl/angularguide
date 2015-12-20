@@ -3,21 +3,25 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script>
-        angular.module('app1', []).run(['$rootScope', function($rootScope) {
-            $rootScope.val1 = 'abc';
-        }]);
+        angular.module('m1', []);
+        angular.module('m2', []);
+
+        angular.element(document).ready(function() {
+            angular.bootstrap(document.getElementById('app1'), ['m1']);
+            angular.bootstrap(document.getElementById('app2'), ['m2']);
+        });
     </script>
 </head>
 <body>
 
-<div ng-app="app1">
+<div id="app1">
     <label>Name:</label>
     <input type="text" ng-model="val1" placeholder="Enter a name here">
     <hr>
     <h1>Hello {{val1}}!</h1>
 </div>
 
-<div>
+<div id="app2">
     <label>Name:</label>
     <input type="text" ng-model="val1" placeholder="Enter a name here">
     <hr>
