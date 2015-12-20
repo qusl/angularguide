@@ -12,7 +12,7 @@
                     // successful
                     var data = response.data;
                     if (data.success) {
-                        $rootScope.result = data.users;
+                        $rootScope.$emit('result', data.users);
                     } else {
                         alert('failed' + response);
                     }
@@ -24,8 +24,8 @@
         }]);
 
         angular.module('app').controller('ResultCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
-            $rootScope.$watch('result', function() {
-                $scope.result = $rootScope.result;
+            $rootScope.$on('result', function(e, result) {
+                $scope.result = result;
             });
         }]);
 
