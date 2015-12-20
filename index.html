@@ -5,14 +5,14 @@
     <script>
         angular.module('app', []);
 
-        angular.module('app').controller('SearchCtrl', ['$scope', '$http', '$rootScope', function($scope, $http, $rootScope) {
+        angular.module('app').controller('SearchCtrl', ['$scope', '$http', 'userService', function($scope, $http, userService) {
 
             $scope.search = function() {
                 $http.get('data.json').then(function(response) {
                     // successful
                     var data = response.data;
                     if (data.success) {
-                        $rootScope.$emit('result', data.users);
+                        userService.result = data.users;
                     } else {
                         alert('failed' + response);
                     }
@@ -23,11 +23,17 @@
             };
         }]);
 
-        angular.module('app').controller('ResultCtrl', ['$scope', '$rootScope', function($scope, $rootScope) {
-            $rootScope.$on('result', function(e, result) {
-                $scope.result = result;
+        angular.module('app').controller('ResultCtrl', ['$scope', 'userService', function($scope, userService) {
+            $scope.$watch(function() {
+                return userService.result;
+            }, function(data) {
+                $scope.result = data;
             });
         }]);
+
+        angular.module('app').factory('userService', function() {
+            return {};
+        });
 
     </script>
 </head>
