@@ -1,36 +1,84 @@
 <!doctype html>
-<html ng-app="m1">
+<html ng-app="app">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script>
-        angular.module('m1', []);
+        angular.module('app', []);
 
-        angular.module('m1').controller('Ctrl1', ['$scope', '$http', function($scope, $http) {
-            $http.get('data.json').then(function (response) {
-                var data = response.data;
-                $scope.val1 = data.val1;
-            });
+        angular.module('app').controller('SearchCtrl', ['$scope', '$http', function($scope, $http) {
 
-            $scope.save = function() {
-                $http.post('fakeurl').then(function(response) {
+            $scope.search = function() {
+                $http.get('data.json').then(function(response) {
                     // successful
+                    var data = response.data;
+                    if (data.success) {
+                        console.log(data.users);
+                    } else {
+                        alert('failed' + response);
+                    }
                 }, function(response) {
                     // failed
-                    alert('failed');
+                    alert('failed' + response.status);
                 });
             };
+        }]);
+
+        angular.module('app').controller('ResultCtrl', ['$scope', function($scope) {
+            $scope.result = [
+                {
+                    "id": 0,
+                    "firstName": "Tom",
+                    "lastName": "Zhang",
+                    "gender": "M",
+                    "occupation": 0,
+                    "introduction": "lalala"
+                },
+                {
+                    "id": 1,
+                    "firstName": "Maria",
+                    "lastName": "Sun",
+                    "gender": "F",
+                    "occupation": 2,
+                    "introduction": "dadada"
+                },
+                {
+                    "id": 2,
+                    "firstName": "Mike",
+                    "lastName": "Li",
+                    "gender": "M",
+                    "occupation": 1,
+                    "introduction": "hahaha"
+                }
+            ];
         }]);
 
     </script>
 </head>
 <body>
 
-<div ng-controller="Ctrl1">
+<div ng-controller="SearchCtrl">
     <label>Name:</label>
     <input type="text" ng-model="val1" placeholder="Enter a name here">
-    <hr>
-    <h1>Hello {{val1}}!</h1>
-    <button ng-click="save()">Save</button>
+    <button ng-click="search()">Search</button>
+</div>
+<hr>
+<div ng-controller="ResultCtrl">
+    <table border="1">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender Name</th>
+            <th>Occupation</th>
+            <th>Introduction</th>
+        </tr>
+        <tr ng-repeat="user in result">
+            <td ng-bind="user.firstName"></td>
+            <td ng-bind="user.lastName"></td>
+            <td ng-bind="user.gender"></td>
+            <td ng-bind="user.occupation"></td>
+            <td ng-bind="user.introduction"></td>
+        </tr>
+    </table>
 </div>
 
 </body>
